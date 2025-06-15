@@ -231,32 +231,32 @@ copies or substantial portions of the Software.
 <table>
   <tr>
     <td align="center">
-      <a href="https://github.com/adolfocampos">
-        <img src="https://github.com/adolfocampos.png" width="100px;" alt="Adolfo Campos"/>
+      <a href="https://github.com/cgomezadolfo">
+        <img src="https://github.com/cgomezadolfo.png" width="100px;" alt="Adolfo Campos"/>
         <br />
         <sub><b>Adolfo Campos</b></sub>
       </a>
       <br />
-      <a href="https://github.com/tuusuario/licitaseguro/commits?author=adolfocampos" title="Code">💻</a>
-      <a href="#design-adolfocampos" title="Design">🎨</a>
+      <a href="#" title="Code">💻</a>
+      <a href="#" title="Design">🎨</a>
+      <a href="#" title="Frontend">🖥️</a>
     </td>
     <td align="center">
-      <a href="https://github.com/yerkoguerra">
-        <img src="https://github.com/yerkoguerra.png" width="100px;" alt="Yerko Guerra"/>
-        <br />
-        <sub><b>Yerko Guerra</b></sub>
-      </a>
+      <img src="https://via.placeholder.com/100x100/6c757d/ffffff?text=YG" width="100px;" alt="Yerko Guerra"/>
       <br />
-      <a href="https://github.com/tuusuario/licitaseguro/commits?author=yerkoguerra" title="Code">💻</a>
-      <a href="#ideas-yerkoguerra" title="Ideas">🤔</a>
+      <sub><b>Yerko Guerra</b></sub>
+      <br />
+      <a href="#" title="Code">💻</a>
+      <a href="#" title="Ideas">🤔</a>
+      <a href="#" title="Backend">⚙️</a>
     </td>
   </tr>
 </table>
 
 ### 📞 Contacto
 
-- **Adolfo Campos** - [@adolfocampos](https://github.com/adolfocampos)
-- **Yerko Guerra** - [@yerkoguerra](https://github.com/yerkoguerra)
+- **Adolfo Campos** - [@cgomezadolfo](https://github.com/cgomezadolfo)
+- **Yerko Guerra** - Colaborador del proyecto
 
 ---
 
