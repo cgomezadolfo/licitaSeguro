@@ -21,14 +21,12 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
 
   if (form && resultados) {
     form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const fechaFormateada = document.getElementById("fecha").value.trim();
+      e.preventDefault();      const fechaFormateada = document.getElementById("fecha").value.trim();
       const estado = document.getElementById("estado").value;
 
       // Validación mejorada
-      if (fechaFormateada === "" || estado === "todas") {
-        showAlert("Por favor completa la fecha y selecciona un estado válido", "warning");
+      if (fechaFormateada === "") {
+        showAlert("Por favor completa la fecha", "warning");
         return;
       }
 
@@ -44,7 +42,21 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
       // Mostrar loading y ocultar otros estados
       showLoading();
 
-      const url = `https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?fecha=${fecha}&estado=${estado}&ticket=AC3A098B-4CD0-41AF-81A5-41284248419B`;
+      // Construir URL con o sin filtro de estado
+      let url = `https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?fecha=${fecha}&ticket=AC3A098B-4CD0-41AF-81A5-41284248419B`;
+        // Solo agregar estado si no es "todas"
+      if (estado !== "todas") {
+        url += `&estado=${estado}`;
+      }
+
+      // Mostrar mensaje informativo basado en la búsqueda
+      let mensajeBusqueda = estado === "todas" 
+        ? "Buscando todas las licitaciones..." 
+        : `Buscando licitaciones con estado: ${estado}...`;
+      
+      if (loading) {
+        loading.querySelector('p').textContent = mensajeBusqueda;
+      }
 
       fetch(url)
         .then(res => {
@@ -52,8 +64,7 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
             throw new Error(`Error HTTP: ${res.status}`);
           }
           return res.json();
-        })
-        .then(data => {
+        })        .then(data => {
           console.log("Datos recibidos:", data);
           hideLoading();
           mostrarResultados(data.Listado);
@@ -97,9 +108,7 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
       `;
       
       form.parentNode.insertBefore(alert, form.nextSibling);
-    }
-
-    function mostrarResultados(licitaciones) {
+    }    function mostrarResultados(licitaciones) {
       resultados.innerHTML = "";
 
       if (!licitaciones || licitaciones.length === 0) {
@@ -107,18 +116,35 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
         return;
       }
 
-      // Mostrar conteo de resultados
-      resultsCount.textContent = `${licitaciones.length} resultado${licitaciones.length !== 1 ? 's' : ''}`;
-      resultsSection.style.display = "block";      licitaciones.forEach((l, index) => {
-        // Obtener el estado de diferentes campos posibles
-        const estado = l.Estado || l.EstadoLicitacion || l.EstadoPublicacion || 'Sin especificar';
-        const fechaPublicacion = l.FechaPublicacion || l.FechaCreacion || 'No disponible';
+      // Mostrar conteo de resultados con información del filtro
+      const estado = document.getElementById("estado").value;
+      const filtroTexto = estado === "todas" ? "todos los estados" : `estado: ${estado}`;
+      resultsCount.textContent = `${licitaciones.length} resultado${licitaciones.length !== 1 ? 's' : ''} (${filtroTexto})`;
+      resultsSection.style.display = "block";licitaciones.forEach((l, index) => {
+        // Mapear CodigoEstado numérico a texto legible
+        function mapearEstado(codigoEstado) {
+          const mapeoEstados = {
+            1: 'Borrador',
+            2: 'Publicada', 
+            3: 'Cerrada',
+            4: 'Desierta',
+            5: 'Adjudicada',
+            6: 'Revocada',
+            7: 'Suspendida',
+            8: 'Finalizada'
+          };
+          return mapeoEstados[codigoEstado] || `Estado ${codigoEstado}`;
+        }
+
+        // Obtener el estado usando CodigoEstado
+        const codigoEstado = l.CodigoEstado;
+        const estado = codigoEstado ? mapearEstado(codigoEstado) : 'Sin especificar';
+        const fechaPublicacion = l.FechaPublicacion || l.FechaCreacion || l.FechaCierre || 'No disponible';
         
         // Mapear estados a colores de badge
         let badgeClass = 'bg-secondary';
         switch(estado.toLowerCase()) {
           case 'publicada':
-          case 'abierta':
             badgeClass = 'bg-success';
             break;
           case 'cerrada':
@@ -130,10 +156,14 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
             break;
           case 'desierta':
           case 'revocada':
+          case 'suspendida':
             badgeClass = 'bg-danger';
             break;
-          default:
+          case 'borrador':
             badgeClass = 'bg-info';
+            break;
+          default:
+            badgeClass = 'bg-secondary';
         }
 
         const fila = `
@@ -145,10 +175,12 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
               <strong>${l.Nombre}</strong>
               <br>
               <small class="text-muted">${l.Descripcion ? l.Descripcion.substring(0, 100) + '...' : 'Sin descripción'}</small>
-              ${fechaPublicacion !== 'No disponible' ? `<br><small class="text-muted"><i class="bi bi-calendar me-1"></i>${fechaPublicacion}</small>` : ''}
+              ${fechaPublicacion !== 'No disponible' ? `<br><small class="text-muted"><i class="bi bi-calendar me-1"></i>${fechaPublicacion.substring(0, 10)}</small>` : ''}
             </td>
             <td>
               <span class="badge ${badgeClass}">${estado}</span>
+              <br>
+              <small class="text-muted">Código: ${codigoEstado || 'N/A'}</small>
             </td>
             <td class="text-center">
               <a href="detalle.html?codigo=${l.CodigoExterno}" class="btn btn-sm btn-outline-primary">
@@ -447,13 +479,53 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
       loadingDetalle.style.display = "none";
     }
   }
-
   function mostrarDetalleCompleto(licitacion) {
+    // Función para mapear código de estado a texto
+    function mapearEstado(codigoEstado) {
+      const mapeoEstados = {
+        1: 'Borrador',
+        2: 'Publicada', 
+        3: 'Cerrada',
+        4: 'Desierta',
+        5: 'Adjudicada',
+        6: 'Revocada',
+        7: 'Suspendida',
+        8: 'Finalizada'
+      };
+      return mapeoEstados[codigoEstado] || `Estado ${codigoEstado}`;
+    }
+
     // Obtener el estado correctamente
-    const estado = licitacion.Estado || licitacion.EstadoLicitacion || 'Sin especificar';
+    const codigoEstado = licitacion.CodigoEstado;
+    const estado = codigoEstado ? mapearEstado(codigoEstado) : 'Sin especificar';
     const fechaCreacion = licitacion.FechaCreacion || 'No disponible';
     const fechaCierre = licitacion.FechaCierre || 'No disponible';
     const montoEstimado = licitacion.MontoEstimado || 'No especificado';
+
+    // Color del badge según estado
+    let badgeClass = 'bg-secondary';
+    switch(estado.toLowerCase()) {
+      case 'publicada':
+        badgeClass = 'bg-success';
+        break;
+      case 'cerrada':
+      case 'finalizada':
+        badgeClass = 'bg-warning text-dark';
+        break;
+      case 'adjudicada':
+        badgeClass = 'bg-primary';
+        break;
+      case 'desierta':
+      case 'revocada':
+      case 'suspendida':
+        badgeClass = 'bg-danger';
+        break;
+      case 'borrador':
+        badgeClass = 'bg-info';
+        break;
+      default:
+        badgeClass = 'bg-secondary';
+    }
 
     detalleDiv.innerHTML = `
       <div class="card shadow-sm">
@@ -482,7 +554,8 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
                 <i class="bi bi-flag me-1"></i>
                 Estado
               </h6>
-              <span class="badge bg-info fs-6">${estado}</span>
+              <span class="badge ${badgeClass} fs-6">${estado}</span>
+              <small class="text-muted d-block">Código: ${codigoEstado || 'N/A'}</small>
             </div>
             
             ${fechaCreacion !== 'No disponible' ? `
@@ -491,7 +564,7 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
                   <i class="bi bi-calendar-plus me-1"></i>
                   Fecha de Creación
                 </h6>
-                <p class="mb-0">${fechaCreacion}</p>
+                <p class="mb-0">${fechaCreacion.substring(0, 10)}</p>
               </div>
             ` : ''}
             
@@ -501,7 +574,7 @@ document.addEventListener("DOMContentLoaded", () => { //DESDE ACA EMPIEZA EL SCR
                   <i class="bi bi-calendar-x me-1"></i>
                   Fecha de Cierre
                 </h6>
-                <p class="mb-0">${fechaCierre}</p>
+                <p class="mb-0">${fechaCierre.substring(0, 10)}</p>
               </div>
             ` : ''}
             
