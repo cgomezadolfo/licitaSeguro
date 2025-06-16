@@ -2,6 +2,21 @@
 
 > Portal web moderno para consultar licitaciones públicas de Chile a través de la API oficial de Mercado Público.
 
+## 🌐 Vista Previa del Proyecto
+
+<div align="center">
+  
+  ### 🚀 [**Ver Demo en Vivo**](https://licita-seguro.vercel.app/) 
+  
+  *Haz clic para explorar el proyecto desplegado en Vercel*
+  
+  ![Vista Previa](https://img.shields.io/badge/Estado-En%20Línea-brightgreen?style=for-the-badge&logo=vercel)
+  ![Última Actualización](https://img.shields.io/badge/Actualizado-Junio%202025-blue?style=for-the-badge&logo=github)
+  
+</div>
+
+---
+
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/es/docs/Web/HTML)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/es/docs/Web/CSS)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/es/docs/Web/JavaScript)
@@ -44,7 +59,13 @@
 
 ## 🚀 Demo
 
-Puedes ver el proyecto en funcionamiento abriendo `index.html` en tu navegador.
+### 🌐 **Acceso Online**
+- **🔗 Demo en vivo**: [https://cgomezadolfo.github.io/licitaseguro](https://cgomezadolfo.github.io/licitaseguro)
+- **📱 Totalmente responsivo**: Funciona en escritorio, tablet y móvil
+- **⚡ Sin instalación**: Solo abre el link y comienza a usar
+
+### 💻 **Ejecución Local**
+También puedes ejecutar el proyecto localmente abriendo `index.html` en tu navegador.
 
 ### 🖥️ Páginas Disponibles
 - **Inicio**: `index.html` - Landing page con información del proyecto
