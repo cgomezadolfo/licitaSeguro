@@ -261,11 +261,12 @@ copies or substantial portions of the Software.
       <a href="#" title="Code">💻</a>
       <a href="#" title="Design">🎨</a>
       <a href="#" title="Frontend">🖥️</a>
-    </td>
-    <td align="center">
-      <img src="https://via.placeholder.com/100x100/6c757d/ffffff?text=YG" width="100px;" alt="Yerko Guerra"/>
-      <br />
-      <sub><b>Yerko Guerra</b></sub>
+    </td>    <td align="center">
+      <a href="https://github.com/yguerrac">
+        <img src="https://github.com/yguerrac.png" width="100px;" alt="Yerko Guerra"/>
+        <br />
+        <sub><b>Yerko Guerra</b></sub>
+      </a>
       <br />
       <a href="#" title="Code">💻</a>
       <a href="#" title="Ideas">🤔</a>
@@ -277,7 +278,7 @@ copies or substantial portions of the Software.
 ### 📞 Contacto
 
 - **Adolfo Campos** - [@cgomezadolfo](https://github.com/cgomezadolfo)
-- **Yerko Guerra** - Colaborador del proyecto
+- **Yerko Guerra** - [@yguerrac](https://github.com/yguerrac)
 
 ---
 
